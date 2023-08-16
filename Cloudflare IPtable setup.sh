@@ -1,17 +1,35 @@
 #!/bin/bash
 
-# Flush Current Rules
-iptables -F
+# Show current firewall rules
+sudo iptables -L
 
-# Grab Cloudflare IPs
-ip_ranges=$(curl -s https://www.cloudflare.com/ips-v4)
-ip_ranges6=$(curl -s https://www.cloudflare.com/ips-v6)
+# Ask user if they wish to continue
+echo -e "\n\nPlease review your current firewall rules."
+read -p "Do you wish to continue? (y/n): " choice
 
-# Set IPtable
-for ip in $ip_ranges; do
- iptables -A INPUT -p tcp -m multiport --dports http,https -s $ip -j ACCEPT
-done
+# Check response
+if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
+    echo -e "\n\n\n\n========================================================="
+    # Allow localhost to communicate with itself 
+    sudo iptables -A INPUT -i lo -j ACCEPT
 
-for ip in $ip_ranges6; do
- ip6tables -A INPUT -p tcp -m multiport --dports http,https -s $ip -j ACCEPT
-done
+    # Allow established connections and related traffic
+    sudo iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+    # Allow new SSH connections 
+    sudo iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+
+    # Drop all other ingress traffic 
+    sudo iptables -A INPUT -j DROP
+
+    sudo iptables -L
+    echo -e "\n\nDone! Please review changes and ensure all services are still accessible."
+
+# If no, exit
+elif [[ "$choice" == "n" || "$choice" == "N" ]]; then
+    echo -e "\nBye! :]"
+    exit 
+
+else
+    echo "Invalid choice. Please enter 'y' or 'n'."
+fi
