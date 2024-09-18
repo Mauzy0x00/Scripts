@@ -30,6 +30,7 @@ if [[ "$go_version_confirm" == "y" ]]; then
     echo 'PATH=$PATH:/usr/local/go/bin' >> ~/.profile
 
     printf "\nSetting GOPATH to ~/.go ...\n"
+    mkdir ~/.go
     echo 'GOPATH=~/.go' >> ~/.profile
     source ~/.profile
 
@@ -82,4 +83,4 @@ else
 fi
 
 printf "\n\nInstallation complete!\n"  
-printf "If your commands aren't appearing, try running 'source ./profile' again!"
+printf "If your commands aren't appearing, try running 'source ./profile' again!\n"
