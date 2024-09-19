@@ -87,4 +87,4 @@ else
 fi
 
 printf "\n\nInstallation complete!\n"
-printf "If commands are not found use 'source ~/.profile' in the terminal!"
+printf "If commands are not found, use 'source ~/.profile' in the terminal.\n"
