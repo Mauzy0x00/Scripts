@@ -86,4 +86,5 @@ else
     printf "\n\nSkipping Hugo installation.\n"
 fi
 
-printf "\n\nInstallation complete!\n"  
+printf "\n\nInstallation complete!\n"
+printf "If commands are not found use 'source ~/.profile' in the terminal!"
